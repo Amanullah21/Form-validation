@@ -46,13 +46,15 @@ const LoginForm = () => {
         }
         setError('Form submitted successfully!');
 
-        alert(`
-        Name : ${firstName + " " + lastName}
-        Email : ${email}   
-        DOB :${dob}
-        Residential :${residentialStreet1 + " " + residentialStreet2}
-        Permanent address : ${permanentStreet1 + " " + permanentStreet2}
-        Total ${documents.length} Documents uploaded`)
+        // alert(`
+        // Name : ${firstName + " " + lastName}
+        // Email : ${email}   
+        // DOB :${dob}
+        // Residential :${residentialStreet1 + " " + residentialStreet2}
+        // Permanent address : ${permanentStreet1 + " " + permanentStreet2}
+        // Total ${documents.length} Documents uploaded`)
+         sendData();
+          
     };
 
     // Handle "Same as Residential" checkbox change
@@ -84,6 +86,38 @@ const LoginForm = () => {
         updatedDocuments.splice(index, 1);
         setDocuments(updatedDocuments);
     };
+
+
+    const sendData = async () => {
+        const url = 'https://reactjsmachinetestapi.xicom.us/v1/user/document-submit';
+        const data = {
+          firstName: firstName,
+          lastName: lastName,
+          dob: dob,
+          email: email,
+          residentialAddress: residentialStreet1 + residentialStreet2,
+          permanentAddress: permanentStreet1 +permanentStreet2,
+          file: 'path/to/file.pdf' // Replace with the actual path or file data
+        };
+      
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+      
+          if (response.ok) {
+            console.log('Data sent successfully!');
+          } else {
+            console.log('Failed to send data:', response.statusText);
+          }
+        } catch (error) {
+          console.log('Error:', error.message);
+        }
+      };
 
     return (
         <div>
